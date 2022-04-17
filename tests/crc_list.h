@@ -1,7 +1,7 @@
 #ifndef CRC_LIST_H
 #define CRC_LIST_H
 
-#include <iostream>
+#include <cstring>
 #include <vector>
 #include <set>
 
@@ -20,9 +20,7 @@ class AbstractProxy_CRC_t
 
 
         //specification
-        std::string  name;
-        std::string  crc_name;
-        std::string  impl_name;
+        char  name[256];
         uint8_t      bits;
         uint64_t     poly;
         uint64_t     init;
@@ -47,8 +45,6 @@ class AbstractProxy_CRC_t
 
         // Calculate methods
         virtual uint64_t get_crc(const void* data, size_t len) = 0;
-        virtual int      get_crc(uint64_t &crc, const char *file_name) = 0;
-        virtual int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf) = 0;
 
         // Calculate for chunks of data
         virtual uint64_t get_raw_crc(const void* data, size_t len) = 0;
@@ -87,12 +83,6 @@ class Proxy_CRC_t : public AbstractProxy_CRC_t
         virtual uint64_t get_crc(const void* data, size_t len)
                                 { return _crc.get_crc(data, len); }
 
-        virtual int      get_crc(uint64_t &crc, const char *file_name)
-                                { return _crc.get_crc((CRC_TYPE &)crc, file_name); }
-
-        virtual int      get_crc(uint64_t &crc, const char* file_name, void* buf, size_t size_buf)
-                                { return _crc.get_crc((CRC_TYPE &)crc, file_name, buf, size_buf); }
-
         //Calculate for chunks of data
         virtual uint64_t get_raw_crc(const void* data, size_t len)
                                     { return _crc.get_raw_crc(data, len); }
@@ -118,13 +108,11 @@ class Proxy_CRC_t : public AbstractProxy_CRC_t
                                ( new Proxy_CRC_t<Bits, Poly, Init, RefIn, RefOut, XorOut, Check, Impl>() );              \
     if( !ptr )                                                                                                           \
     {                                                                                                                    \
-        std::cerr << "Can't get MEM for Proxy_CRC_t<" << Bits << "," << Poly << "," << Init << "," << RefIn << ","       \
-                                                      << RefOut << "," << XorOut << "," << Check << ">";                 \
+        stest_printf("Can't get MEM for Proxy_CRC_t<%x,%llx,%llx,%x,%x,%llx,%llx",                                       \
+                     Bits, Poly, Init, RefIn, RefOut, XorOut, Check);                                                    \
         exit(-1);                                                                                                        \
     }                                                                                                                    \
-    ptr->name      = CRC_Name IMPL_Name;                                                                               \
-    ptr->crc_name  = CRC_Name;                                                                                           \
-    ptr->impl_name = IMPL_Name;                                                                                          \
+    std::strcpy(ptr->name, CRC_Name IMPL_Name);                                                                          \
     ptr->bits      = Bits;                                                                                               \
     ptr->poly      = Poly;                                                                                               \
     ptr->init      = Init;                                                                                               \
@@ -312,12 +300,7 @@ const std::vector<AbstractProxy_CRC_t *> CRC_List = get_crc_list();
 
 size_t get_cnt_impl()
 {
-     std::set<std::string> impl_names;
-
-     for(size_t i = 0; i < CRC_List.size(); i++)
-        impl_names.insert(CRC_List[i]->impl_name);
-
-     return impl_names.size();
+     return 3;
 }
 
 

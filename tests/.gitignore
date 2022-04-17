@@ -25,7 +25,6 @@
 
 # asm files
 *.s
-*.S
 
 
 # Binary files
@@ -40,6 +39,7 @@ crc_test*
 
 # Temp files
 *.*~
+*.d
 
 
 

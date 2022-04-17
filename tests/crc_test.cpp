@@ -1,10 +1,7 @@
 #include <stdlib.h>
 #include <unistd.h>
-#include <string.h>
 
 #include <vector>
-#include <string>
-#include <iostream>
 #include <sstream>
 
 #include "stest.h"
@@ -19,19 +16,9 @@ const uint8_t std_check_data[] = {0x31, 0x32, 0x33, 0x34, 0x35, 0x36, 0x37, 0x38
 
 
 
-static std::stringstream ss;
-static std::string       msg;
-
-
 void test_init(struct test_case_t *test_case)
 {
     (void)test_case; //don't use
-
-    ss.clear();
-    ss.str(""); // clear ss
-    ss << std::hex;
-
-    msg.clear();
 }
 
 
@@ -117,16 +104,12 @@ TEST(test_crc_type_helper_uint64)
 TEST(test_universal_crc_get_bits)
 {
     for(size_t i = 0; i < CRC_List.size(); i++)
-    {
-
-        if( CRC_List[i]->get_bits() != CRC_List[i]->bits)
-        {
-            ss << "For CRC: "       << CRC_List[i]->name
-               << " bits must be: " << (int)CRC_List[i]->bits
-               << " but get: "      << (int)CRC_List[i]->get_bits();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+    {       
+        TEST_ASSERTF(CRC_List[i]->get_bits() == CRC_List[i]->bits, 
+                     "For CRC: %s bits must be: 0x%x but get: 0x%x",
+                     CRC_List[i]->name,
+                     (int)CRC_List[i]->bits, 
+                     (int)CRC_List[i]->get_bits());
     }
 
     TEST_PASS(NULL);
@@ -138,15 +121,11 @@ TEST(test_universal_crc_get_poly)
 {
     for( size_t i = 0; i < CRC_List.size(); i++)
     {
-
-        if( CRC_List[i]->get_poly() != CRC_List[i]->poly )
-        {
-            ss << "For CRC: "       << CRC_List[i]->name
-               << " poly must be: " << CRC_List[i]->poly
-               << " but get: "      << CRC_List[i]->get_poly();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(CRC_List[i]->get_poly() == CRC_List[i]->poly, 
+                     "For CRC: %s poly must be: 0x%llx but get: 0x%llx", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->poly, 
+                     CRC_List[i]->get_poly());
     }
 
     TEST_PASS(NULL);
@@ -158,15 +137,11 @@ TEST(test_universal_crc_get_init)
 {
     for( size_t i = 0; i < CRC_List.size(); i++)
     {
-
-        if( CRC_List[i]->get_init() != CRC_List[i]->init )
-        {
-            ss << "For CRC: "       << CRC_List[i]->name
-               << " Init must be: " << CRC_List[i]->init
-               << " but get: "      << CRC_List[i]->get_init();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(CRC_List[i]->get_init() == CRC_List[i]->init, 
+                     "For CRC: %s Init must be: 0x%llx but get: 0x%llx", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->init, 
+                     CRC_List[i]->get_init());
     }
 
     TEST_PASS(NULL);
@@ -178,15 +153,11 @@ TEST(test_universal_crc_get_xor_out)
 {
     for( size_t i = 0; i < CRC_List.size(); i++)
     {
-
-        if( CRC_List[i]->get_xor_out() != CRC_List[i]->xor_out )
-        {
-            ss << "For CRC: "          << CRC_List[i]->name
-               << " Xor_out must be: " << CRC_List[i]->xor_out
-               << " but get: "         << CRC_List[i]->get_xor_out();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(CRC_List[i]->get_xor_out() == CRC_List[i]->xor_out, 
+                     "For CRC: %s Xor_out must be: 0x%llx but get: 0x%llx", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->xor_out, 
+                     CRC_List[i]->get_xor_out());
     }
 
     TEST_PASS(NULL);
@@ -198,15 +169,11 @@ TEST(test_universal_crc_get_ref_in)
 {
     for( size_t i = 0; i < CRC_List.size(); i++)
     {
-
-        if( CRC_List[i]->get_ref_in() != CRC_List[i]->ref_in )
-        {
-            ss << "For CRC: "         << CRC_List[i]->name
-               << " ref_in must be: " << CRC_List[i]->ref_in
-               << " but get: "        << CRC_List[i]->get_ref_in();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(CRC_List[i]->get_ref_in() == CRC_List[i]->ref_in, 
+                     "For CRC: %s ref_in must be: 0x%x but get: 0x%x", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->ref_in, 
+                     CRC_List[i]->get_ref_in());
     }
 
     TEST_PASS(NULL);
@@ -218,15 +185,11 @@ TEST(test_universal_crc_get_ref_out)
 {
     for( size_t i = 0; i < CRC_List.size(); i++)
     {
-
-        if( CRC_List[i]->get_ref_out() != CRC_List[i]->ref_out )
-        {
-            ss << "For CRC: "          << CRC_List[i]->name
-               << " ref_out must be: " << CRC_List[i]->ref_out
-               << " but get: "         << CRC_List[i]->get_ref_out();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        TEST_ASSERTF(CRC_List[i]->get_ref_out() == CRC_List[i]->ref_out, 
+                     "For CRC: %s ref_out must be: 0x%x but get: 0x%x",
+                     CRC_List[i]->name,
+                     CRC_List[i]->ref_out, 
+                     CRC_List[i]->get_ref_out());
     }
 
     TEST_PASS(NULL);
@@ -315,25 +278,18 @@ TEST(test_crc_std_check)
     {
 
         crc = CRC_List[i]->get_crc(std_check_data, sizeof(std_check_data));
-
-        if( crc != CRC_List[i]->check )
-        {
-            ss << "For CRC: "      << CRC_List[i]->name
-               << " std check: 0x" << CRC_List[i]->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
-
-
-        if( CRC_List[i]->get_check() != CRC_List[i]->check )
-        {
-            ss << "For CRC: "          << CRC_List[i]->name
-               << " std check: 0x"     << CRC_List[i]->check
-               << " but get_check: 0x" << CRC_List[i]->get_check();
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        
+        TEST_ASSERTF(crc == CRC_List[i]->check, 
+                     "For CRC: %s std check: 0x%llx but get: 0x%llx", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->check, 
+                     crc);
+        
+        TEST_ASSERTF(CRC_List[i]->get_check() == CRC_List[i]->check, 
+                     "For CRC: %s std check: 0x%llx but get_check: 0x%llx", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->check, 
+                     CRC_List[i]->get_check());
     }
 
     TEST_PASS(NULL);
@@ -365,13 +321,13 @@ TEST(test_crc_impl_1byte)
             for(size_t j = 1; j < CNT_IMPL; j++)
             {
                 crc2 = CRC_List[i+j]->get_crc(&test_byte, sizeof(test_byte));
-                if( crc1 !=  crc2)
-                {
-                    ss << "For CRC: " << CRC_List[i]->name  << " crc: 0x" << crc1
-                       << " but for:" << CRC_List[i+j]->name<< " crc: 0x" << crc2;
-                    msg = ss.str();
-                    TEST_FAIL(msg.c_str());
-                }
+                
+                TEST_ASSERTF(crc1 == crc2, 
+                             "For CRC: %s crc: 0x%llx but for: %s crc: 0x%llx", 
+                             CRC_List[i]->name,
+                             crc1, 
+                             CRC_List[i+j]->name,
+                             crc2);
             }
         }
     }
@@ -400,13 +356,13 @@ TEST(test_crc_impl_data_xyz_256)
         for(size_t j = 1; j < CNT_IMPL; j++)
         {
             crc2 = CRC_List[i+j]->get_crc(test_data, sizeof(test_data));
-            if( crc1 !=  crc2)
-            {
-                ss << "For CRC: " << CRC_List[i]->name  << " crc: 0x" << crc1
-                   << " but for:" << CRC_List[i+j]->name<< " crc: 0x" << crc2;
-                msg = ss.str();
-                TEST_FAIL(msg.c_str());
-            }
+            
+            TEST_ASSERTF(crc1 == crc2, 
+                         "For CRC: %s crc: 0x%llx but for: %s crc: 0x%llx", 
+                         CRC_List[i]->name,
+                         crc1, 
+                         CRC_List[i+j]->name,
+                         crc2);
         }
     }
 
@@ -436,65 +392,14 @@ TEST(test_crc_impl_data_xxx_256)
             for(size_t j = 1; j < CNT_IMPL; j++)
             {
                 crc2 = CRC_List[i+j]->get_crc(test_data, sizeof(test_data));
-                if( crc1 !=  crc2)
-                {
-                    ss << "For CRC: " << CRC_List[i]->name  << " crc: 0x" << crc1
-                       << " but for:" << CRC_List[i+j]->name<< " crc: 0x" << crc2;
-                    msg = ss.str();
-                    TEST_FAIL(msg.c_str());
-                }
+                
+                TEST_ASSERTF(crc1 == crc2, 
+                             "For CRC: %s crc: 0x%llx but for: %s crc: 0x%llx", 
+                             CRC_List[i]->name,
+                             crc1, 
+                             CRC_List[i+j]->name,
+                             crc2);
             }
-        }
-    }
-
-    TEST_PASS(NULL);
-}
-
-
-//------------- tests for Calculate CRC for file -------------
-
-
-
-TEST(test_crc_std_check_file)
-{
-    uint64_t crc;
-
-    for( size_t i = 0; i < CRC_List.size(); i++)
-    {
-        crc = 0;
-        int res = CRC_List[i]->get_crc(crc, "std_file_to_test_crc");
-
-        if( (res != 0) ||  (crc != CRC_List[i]->check) )
-        {
-            ss << "For CRC: "      << CRC_List[i]->name
-               << " std check: 0x" << CRC_List[i]->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
-    }
-
-    TEST_PASS(NULL);
-}
-
-
-
-TEST(test_crc_no_file)
-{
-    uint64_t crc;
-
-    for( size_t i = 0; i < CRC_List.size(); i++)
-    {
-        crc = 0;
-        int res = CRC_List[i]->get_crc(crc, "");
-
-        if( (res != -1) || (crc != 0) )
-        {
-            ss << "For CRC: "                  << CRC_List[i]->name
-               << "no file but get_crc() ret:" << res
-               << " crc:"                      << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
         }
     }
 
@@ -517,15 +422,12 @@ TEST(test_crc_for_cunks)
         crc = CRC_List[i]->get_raw_crc(&std_check_data[0], 4, crc);
         crc = CRC_List[i]->get_raw_crc(&std_check_data[4], 5, crc);
         crc = CRC_List[i]->get_end_crc(crc);
-
-        if( crc != CRC_List[i]->check )
-        {
-            ss << "For CRC: "      << CRC_List[i]->name
-               << " std check: 0x" << CRC_List[i]->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        
+        TEST_ASSERTF(crc == CRC_List[i]->check, 
+                     "For CRC: %s std check: 0x%llx but get: 0x%llx", 
+                     CRC_List[i]->name,
+                     CRC_List[i]->check, 
+                     crc);
     }
 
     TEST_PASS(NULL);
@@ -542,15 +444,12 @@ TEST(test_crc_for_cunks2) //use wrapper for first chunk of data
         crc = CRC_List[i]->get_raw_crc(&std_check_data[0], 4);
         crc = CRC_List[i]->get_raw_crc(&std_check_data[4], 5, crc);
         crc = CRC_List[i]->get_end_crc(crc);
-
-        if( crc != CRC_List[i]->check )
-        {
-            ss << "For CRC: "      << CRC_List[i]->name
-               << " std check: 0x" << CRC_List[i]->check
-               << " but get: 0x"   << crc;
-            msg = ss.str();
-            TEST_FAIL(msg.c_str());
-        }
+        
+        TEST_ASSERTF(crc == CRC_List[i]->check, 
+                     "For CRC: %s std check: 0x%llx but get: 0x%llx",
+                     CRC_List[i]->name,
+                     CRC_List[i]->check, 
+                     crc);
     }
 
     TEST_PASS(NULL);
@@ -585,9 +484,6 @@ stest_func tests[] =
     test_crc_impl_1byte,
     test_crc_impl_data_xyz_256,
     test_crc_impl_data_xxx_256,
-
-    test_crc_std_check_file,
-    test_crc_no_file,
 
     test_crc_for_cunks,
     test_crc_for_cunks2,
